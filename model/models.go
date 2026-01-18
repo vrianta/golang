@@ -22,7 +22,7 @@ type (
 		components
 		db            *sql.DB
 		TableName     string       // Name of the table in the database
-		FieldTypes    FieldTypeset // Map of field names to their types
+		FieldTypes    fieldTypeset // Map of field names to their types
 		schemas       []schema
 		initialised   bool   // Flag to check if the model is initialised
 		initialisedDB bool   // Flag to set if the database is initialised by the user
@@ -61,7 +61,7 @@ func init() {
  * So Dynaimic Table Updation will be handled during development only
  * It will provide the default functions to handle the model like Create, Read, Update, Delete
  */
-func newModel(tableName string, FieldTypes FieldTypeset, depends_on []string) meta {
+func newModel(tableName string, FieldTypes fieldTypeset, depends_on []string) meta {
 
 	for _, field := range FieldTypes {
 		if field.fk == nil {
@@ -73,7 +73,7 @@ func newModel(tableName string, FieldTypes FieldTypeset, depends_on []string) me
 		components: make(components),
 		TableName:  tableName,
 		FieldTypes: FieldTypes,
-		primary: func(FieldTypes FieldTypeset) *Field {
+		primary: func(FieldTypes fieldTypeset) *Field {
 			for _, field := range FieldTypes {
 				if field.index.PrimaryKey {
 					return field // Return the pointer directly from the map
@@ -98,7 +98,7 @@ func New[T any](tableName string, structure T) *Table[T] {
 		panic("structure passed to New must be a struct")
 	}
 
-	FieldTypeset := make(FieldTypeset, t.NumField())
+	FieldTypeset := make(fieldTypeset, t.NumField())
 	depends_on := []string{}
 	for i := 0; i < t.NumField(); i++ {
 		structField := t.Field(i)
@@ -235,6 +235,16 @@ func (t *Table[T]) InitialiseDB(driver string, DSN string) *Table[T] {
 		panic("Error opening database: " + err.Error())
 	}
 
+	t.meta.initialisedDB = true
+
+	t.syncTable()
+
+	return t
+}
+
+// function which will initialise the With argument as DB instance
+func (t *Table[T]) TableOfDb(db *sql.DB) *Table[T] {
+	t.meta.db = db
 	t.meta.initialisedDB = true
 
 	t.syncTable()

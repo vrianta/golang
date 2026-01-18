@@ -78,59 +78,129 @@ var Users = model.New(db, "users", struct {
     FirstName *model.Field
     LastName  *model.Field
 }{
-    UserId: &model.Field{
-        Type:     model.FieldTypes.VarChar,
-        Length:   100,
-        Nullable: false,
-        Index: model.Index{
-            PrimaryKey: true,
-            Unique:     false,
-            Index:      true,
-        },
-    },
-    UserName: &model.Field{
-        Type:     model.FieldTypes.VarChar,
-        Length:   30,
-        Nullable: false,
-        Index: model.Index{
-            Unique: true,
-            Index:  true,
-        },
-    },
-    Password: &model.Field{
-        Type:     model.FieldTypes.Text,
-        Nullable: false,
-    },
-    FirstName: &model.Field{
-        Type:     model.FieldTypes.VarChar,
-        Length:   20,
-        Nullable: false,
-    },
-    LastName: &model.Field{
-        Type:     model.FieldTypes.VarChar,
-        Length:   20,
-        Nullable: false,
-    },
+    UserId: model.CreateField().AsVarchar(100).IsPrimary().NotNull(),
+    UserName: model.CreateField().AsVarchar(30).IsUnique().NotNull(),
+    Password: model.CreateField().AsText().NotNull(),
+    FirstName: model.CreateField().AsVarchar(20).NotNull(),
+    LastName: model.CreateField().AsVarchar(20).NotNull(),
 })
 ```
 
-### Field Options
+### Field Creation API
 
-- **Type** (FieldType): Data type (VarChar, Int, Text, Timestamp, etc.)
-- **Length** (int): For VARCHAR types, the maximum length (0 = unspecified)
-- **Nullable** (bool): Whether NULL values are allowed
-- **DefaultValue** (string): Default value for the column
-- **AutoIncrement** (bool): Auto-increment the column
-- **Index** (Index struct): Configure PRIMARY KEY, UNIQUE, or regular INDEX
+Fields are created using a chainable, fluent API starting with `CreateField()`. Methods can be chained together to define field properties:
 
-### Supported Field Types
+```go
+// Basic syntax
+model.CreateField()
+    .AsVarchar(100)      // Set type and length
+    .NotNull()           // Mark as NOT NULL
+    .IsPrimary()         // Set as primary key
+```
 
-- `VarChar`, `Text` - String types
-- `Int`, `BigInt`, `SmallInt` - Integer types
-- `Decimal`, `Float` - Decimal types
-- `Boolean` - Boolean type
-- `Date`, `DateTime`, `Timestamp` - Temporal types
-- `JSON` - JSON type
+### Numeric Field Types
+- `AsTinyInt()` - 1-byte integer
+- `AsSmallInt()` - 2-byte integer
+- `AsMediumInt()` - 3-byte integer
+- `AsInt()` - 4-byte integer
+- `AsBigInt()` - 8-byte integer
+- `AsFloat()` - Floating-point number
+- `AsDouble()` - Double precision floating-point
+- `AsReal()` - Real number
+- `AsDecimal(precision)` - Fixed-point decimal with precision
+
+### String & Text Field Types
+- `AsChar(n)` - Fixed-length character string
+- `AsVarchar(n)` - Variable-length string with max length
+- `AsTinyText()` - Small text (255 bytes)
+- `AsText()` - Medium text (65KB)
+- `AsMediumText()` - Large text (16MB)
+- `AsLongText()` - Very large text (4GB)
+
+### Binary & Blob Field Types
+- `AsBlob()` - Binary large object
+- `AsTinyBlob()` - Small binary data (255 bytes)
+- `AsMediumBlob()` - Medium binary data (16MB)
+- `AsLongBlob()` - Large binary data (4GB)
+
+### Date & Time Field Types
+- `AsDate()` - Date only (YYYY-MM-DD)
+- `AsTime()` - Time only (HH:MM:SS)
+- `AsTimestamp()` - Date and time with auto-update capability
+- `AsYear()` - Year only
+
+### JSON & Structured Field Types
+- `AsJSON()` - JSON document
+- `AsEnum(values...)` - Single value from predefined set
+- `AsSet(values...)` - Multiple values from predefined set
+
+### Geometry Field Types
+- `AsGeometry()` - Generic geometry type
+- `AsPoint()` - Single point coordinate
+- `AsLineString()` - Series of connected points
+- `AsPolygon()` - Closed polygon shape
+
+### Other Field Types
+- `AsUUID()` - Universally unique identifier
+- `AsBool()` - Boolean/Boolean value
+
+### Field Modifiers
+- `NotNull()` - Mark field as NOT NULL (by default, fields are nullable)
+- `Default(value)` - Set a default value for the field
+- `DefaultNull()` - Set default to NULL
+- `DefaultNow()` - Set default to CURRENT_TIMESTAMP
+- `IsPrimary()` - Mark as primary key
+- `IsUnique()` - Add unique constraint
+- `IsIndex()` - Add a regular index
+
+### Field Creation Examples
+
+Here are practical examples of defining fields using the chainable API:
+
+```go
+var Users = model.New(db, "users", struct {
+    UserId      *model.Field
+    Email       *model.Field
+    Username    *model.Field
+    Age         *model.Field
+    Bio         *model.Field
+    CreatedAt   *model.Field
+    UpdatedAt   *model.Field
+    Metadata    *model.Field
+    Status      *model.Field
+    IsActive    *model.Field
+}{
+    // Primary key with auto-increment
+    UserId: model.CreateField().AsBigInt().IsPrimary().NotNull(),
+    
+    // Unique varchar field
+    Email: model.CreateField().AsVarchar(255).IsUnique().NotNull(),
+    
+    // Indexed field
+    Username: model.CreateField().AsVarchar(50).IsIndex().NotNull(),
+    
+    // Integer field
+    Age: model.CreateField().AsInt(),
+    
+    // Text field (nullable)
+    Bio: model.CreateField().AsText(),
+    
+    // Timestamp with default
+    CreatedAt: model.CreateField().AsTimestamp().DefaultNow().NotNull(),
+    UpdatedAt: model.CreateField().AsTimestamp().DefaultNow(),
+    
+    // JSON field
+    Metadata: model.CreateField().AsJSON(),
+    
+    // Enum field
+    Status: model.CreateField().AsEnum("active", "inactive", "suspended").Default("'active'"),
+    
+    // Boolean field
+    IsActive: model.CreateField().AsBool().Default("true"),
+}).InitialiseDB("mysql", DSN)
+```
+
+All methods return the `*Field` pointer, allowing you to chain as many modifiers as needed.
 
 ### Model Field Access
 
@@ -175,12 +245,6 @@ Before you can use your models, you need to initialize them. The initialization 
 1. Creates the table if it doesn't exist
 2. Compares your model definitions with the database schema
 3. Optionally synchronizes any schema differences
-
-```go
-func init() {
-    Users.Initialize()  // Creates table and syncs schema if needed
-}
-```
 
 **Automatic Migration**: If you run your application with the `--migrate-model` or `-mm` flag, the system will automatically sync the database schema with your model definitions:
 
@@ -347,7 +411,7 @@ Schema synchronization automatically compares your Go model definitions with you
 
 ### How It Works
 
-The `SyncModelSchema()` and `syncTableSchema()` functions detect and fix:
+The `syncModelSchema()` and `syncTableSchema()` functions detect and fix:
 
 1. **Add New Fields**: Detects fields in your model that don't exist in the database and creates them
 2. **Modify Existing Fields**: Identifies type mismatches, length changes, nullable/auto-increment differences
@@ -355,15 +419,6 @@ The `SyncModelSchema()` and `syncTableSchema()` functions detect and fix:
 4. **Remove Unused Fields**: Detects fields in the database that no longer exist in your model (with confirmation)
 
 ### Using Schema Synchronization
-
-**Enable auto-sync on startup**:
-
-```go
-func init() {
-    Users.SyncModelSchema()  // Load and compare current database schema
-    Users.Initialize()       // Create table if not exists
-}
-```
 
 **Run migration manually**:
 
@@ -386,22 +441,12 @@ The system detects and can fix:
 
 **Original model**:
 ```go
-"email": {
-    Name:     "email",
-    Type:     model.FieldTypes.VarChar,
-    Length:   50,
-    Nullable: false,
-}
+Email: model.CreateField().AsVarchar(50).NotNull()
 ```
 
 **Updated model** (length changed):
 ```go
-"email": {
-    Name:     "email",
-    Type:     model.FieldTypes.VarChar,
-    Length:   100,  // Changed from 50 to 100
-    Nullable: false,
-}
+Email: model.CreateField().AsVarchar(100).NotNull()  // Changed from 50 to 100
 ```
 
 When you run with `--migrate-model`, the system automatically alters the column:

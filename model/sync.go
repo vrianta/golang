@@ -43,7 +43,7 @@ func (m *meta) syncTableSchema() {
 		schemaMap[s.field] = s
 	}
 
-	FieldTypeset := make(FieldTypeset, len(m.FieldTypes))
+	FieldTypeset := make(fieldTypeset, len(m.FieldTypes))
 	for _, f := range m.FieldTypes {
 		FieldTypeset[f.name] = f
 	}

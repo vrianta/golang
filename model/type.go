@@ -4,7 +4,7 @@ import "database/sql"
 
 type (
 	fieldType    uint16
-	FieldTypeset map[string]*Field
+	fieldTypeset map[string]*Field
 	Result       map[string]any
 	Results      map[any]Result
 
