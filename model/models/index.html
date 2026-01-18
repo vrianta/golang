@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Models & Fields – ModelsHandler</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap -->
+    <link href="../assets/css/Bootstrap/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Base styles -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/theme.css">
+</head>
+
+<body data-section="models">
+
+<!-- HEADER -->
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="../index.html">ModelsHandler</a>
+        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#docsNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="docsNav" class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto" id="dynamic-top-nav"></ul>
+        </div>
+    </div>
+</nav>
+
+<!-- PAGE -->
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- SIDEBAR -->
+        <aside class="col-lg-3 col-xl-2 d-none d-lg-block docs-sidebar">
+            <nav id="dynamic-sidebar"></nav>
+        </aside>
+
+        <!-- CONTENT -->
+        <main class="col-lg-9 col-xl-10 docs-content">
+            <article class="docs-article">
+
+                <section id="defining-model">
+                    <h2>Defining a Model</h2>
+                    <p>
+                        In ModelsHandler, a model represents a database table.
+                        Models are defined using Go structs where each field
+                        corresponds to a database column.
+                    </p>
+
+                    <p>
+                        A model is created using <code>model.New</code> and a
+                        struct containing pointer fields to <code>model.Field</code>.
+                        The database connection is provided when initializing the model.
+                    </p>
+
+                    <pre><code class="language-go">
+// db is a standard *sql.DB instance
+var Users = model.New("users", struct {
+    UserId   *model.Field
+    UserName *model.Field
+    Password *model.Field
+}{
+    UserId:   model.CreateField().AsVarchar(100).IsPrimary().NotNull(),
+    UserName: model.CreateField().AsVarchar(30).IsUnique().NotNull(),
+    Password: model.CreateField().AsText().NotNull(),
+}).WithDB(db)
+
+// Initialising Seperate DB instance for each model.
+var Users = model.New("users", struct {
+    UserId   *model.Field
+    UserName *model.Field
+    Password *model.Field
+}{
+    UserId:   model.CreateField().AsVarchar(100).IsPrimary().NotNull(),
+    UserName: model.CreateField().AsVarchar(30).IsUnique().NotNull(),
+    Password: model.CreateField().AsText().NotNull(),
+}).initializeDB("driver", DSN) // driver: "mysql", "postgres", etc. DSN: Data Source Name
+                    </code></pre>
+                </section>
+
+                <section id="field-types">
+                    <h2>Field Types</h2>
+                    <p>
+                        Field types define how data is stored in the database.
+                        ModelsHandler provides a fluent API for defining
+                        common SQL types.
+                    </p>
+
+                    <pre><code class="language-go">
+// String types
+model.CreateField().AsVarchar(255)
+model.CreateField().AsText()
+
+// Numeric types
+model.CreateField().AsInt()
+model.CreateField().AsBigInt()
+
+// Special types
+model.CreateField().AsBool()
+model.CreateField().AsJSON()
+                    </code></pre>
+                </section>
+
+                <section id="field-modifiers">
+                    <h2>Field Modifiers</h2>
+                    <p>
+                        Modifiers add constraints and behavior to fields.
+                        They can be chained after defining a field type.
+                    </p>
+
+                    <pre><code class="language-go">
+model.CreateField().
+    AsVarchar(100).
+    NotNull().
+    IsUnique().
+    Default("guest")
+                    </code></pre>
+                </section>
+
+                <section id="accessing-fields">
+                    <h2>Accessing Fields</h2>
+                    <p>
+                        After defining a model, all fields are accessible
+                        through the <code>.Fields</code> property.
+                    </p>
+
+                    <pre><code class="language-go">
+Users.Fields.UserId
+Users.Fields.UserName
+Users.Fields.Password
+                    </code></pre>
+
+                    <p>
+                        These field references are used throughout the
+                        query builder to ensure type-safe queries.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Next Steps</h2>
+                    <p>From here, continue with:</p>
+                    <ul>
+                        <li><a href="../fields/">Field Creation</a></li>
+                        <li><a href="../queries/">Building Queries</a></li>
+                        <li><a href="../schema/">Schema Synchronization</a></li>
+                    </ul>
+                </section>
+
+            </article>
+        </main>
+
+    </div>
+</div>
+
+<script src="../assets/js/Bootstrap/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/navigations.js"></script>
+</body>
+
+</html>

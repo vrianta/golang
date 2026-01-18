@@ -1,0 +1,225 @@
+/* =========================
+   VRIANTA COLOR THEME ONLY
+   (Bootstrap-compatible)
+========================= */
+
+/* Base */
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+}
+
+/* Text */
+.text-muted {
+  color: var(--text-muted) !important;
+}
+
+p {
+  color: var(--text-muted);
+}
+
+/* Navbar */
+.navbar {
+  background-color: var(--bg-main) !important;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.navbar-brand {
+  color: var(--accent) !important;
+}
+
+.nav-link {
+  color: var(--text-muted) !important;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--text-main) !important;
+}
+
+/* Cards */
+.card,
+.feature-card,
+.doc-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  color: var(--text-main);
+}
+
+/* Card hover (subtle, optional) */
+.doc-card:hover {
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-main);
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: #020617;
+}
+
+.btn-primary:hover {
+  background-color: #22a8df;
+  border-color: #22a8df;
+}
+
+.btn-outline-secondary {
+  color: var(--text-main);
+  border-color: var(--border-soft);
+}
+
+.btn-outline-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: var(--accent);
+  color: var(--text-main);
+}
+
+/* Footer */
+.footer {
+  background-color: var(--bg-main);
+  border-top: 1px solid var(--border-soft);
+  color: var(--text-muted);
+}
+
+/* Links */
+a {
+  color: inherit;
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+/* Borders */
+.border,
+.border-top,
+.border-bottom {
+  border-color: var(--border-soft) !important;
+}
+
+/* =========================
+   DOCS LAYOUT
+========================= */
+
+.docs-sidebar {
+  position: sticky;
+  top: 72px;
+  height: calc(100vh - 72px);
+  padding: 32px 24px;
+  border-right: 1px solid var(--border-soft);
+  background: var(--bg-main);
+}
+
+.sidebar-title {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.sidebar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-nav li {
+  margin-bottom: 8px;
+}
+
+.sidebar-nav a {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.sidebar-nav a.active,
+.sidebar-nav a:hover {
+  color: var(--text-main);
+}
+
+/* CONTENT */
+.docs-content {
+  padding: 48px clamp(20px, 5vw, 64px);
+}
+
+.docs-article {
+  max-width: 860px;
+  padding: 0;
+}
+
+.docs-article h1 {
+  margin-bottom: 16px;
+}
+
+.docs-article section {
+  margin-top: 48px;
+}
+
+/* =========================
+   DOCS PAGE POLISH
+========================= */
+
+/* Page header (mini hero) */
+.docs-header {
+  padding: 48px 0 32px;
+  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: 48px;
+}
+
+.docs-header h1 {
+  font-size: clamp(2rem, 4vw, 2.6rem);
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+
+.docs-header p {
+  max-width: 52ch;
+  font-size: 1.05rem;
+  color: var(--text-muted);
+}
+
+/* Reading surface */
+.docs-article {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: clamp(28px, 4vw, 48px);
+}
+
+/* Sections */
+.docs-article section + section {
+  margin-top: 64px;
+}
+
+/* Headings */
+.docs-article h2 {
+  font-size: 1.4rem;
+  margin-bottom: 12px;
+}
+
+.docs-article h3 {
+  font-size: 1.15rem;
+  margin-bottom: 8px;
+}
+
+/* Paragraph rhythm */
+.docs-article p {
+  max-width: 68ch;
+  margin-bottom: 16px;
+}
+
+/* Code blocks (basic, improved later) */
+.docs-article pre {
+  background: #020617;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  overflow-x: auto;
+  margin-top: 12px;
+}

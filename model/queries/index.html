@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Queries – ModelsHandler</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap -->
+    <link href="../assets/css/Bootstrap/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Base styles -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/theme.css">
+</head>
+
+<body data-section="queries">
+
+    <!-- HEADER -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">ModelsHandler</a>
+            <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#docsNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div id="docsNav" class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto" id="dynamic-top-nav"></ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PAGE -->
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- SIDEBAR -->
+            <aside class="col-lg-3 col-xl-2 d-none d-lg-block docs-sidebar">
+                <nav id="dynamic-sidebar"></nav>
+            </aside>
+
+            <!-- CONTENT -->
+            <main class="col-lg-9 col-xl-10 docs-content">
+                <article class="docs-article">
+
+                    <!-- INTRO -->
+                    <section id="starting-queries">
+                        <h2>Starting Queries</h2>
+                        <p>
+                            Queries are built using a fluent, chainable API.
+                            All operations start from a model instance.
+                        </p>
+
+                        <pre><code class="language-go">
+Users.Get()     // SELECT
+Users.Create()  // INSERT
+Users.Update()  // UPDATE
+                    </code></pre>
+                    </section>
+
+                    <!-- SELECT -->
+                    <section id="select">
+                        <h2>Fetching Data (SELECT)</h2>
+
+                        <pre><code class="language-go">
+// Fetch all rows
+results, err := Users.Get().Fetch()
+
+// Fetch with condition
+results, err := Users.Get().
+    Where(Users.Fields.UserName).
+    Is("alice").
+    Fetch()
+
+// Fetch a single row
+user, err := Users.Get().
+    Where(Users.Fields.UserId).
+    Is("u123").
+    First()
+                    </code></pre>
+                    </section>
+
+                    <!-- INSERT -->
+                    <section id="insert">
+                        <h2>Creating Records (INSERT)</h2>
+
+                        <pre><code class="language-go">
+err := Users.Create().
+    Set(Users.Fields.UserId).To("u123").
+    Set(Users.Fields.UserName).To("alice").
+    Set(Users.Fields.Password).To("securepass").
+    Exec()
+                    </code></pre>
+                    </section>
+
+                    <!-- UPDATE -->
+                    <section id="update">
+                        <h2>Updating Records (UPDATE)</h2>
+
+                        <pre><code class="language-go">
+// Update with WHERE
+err := Users.Get().
+    Where(Users.Fields.UserId).
+    Is("u123").
+    Set(Users.Fields.Password).
+    To("newpass").
+    Exec()
+
+// Using Update()
+err := Users.Update(nil).
+    Where(Users.Fields.UserId).
+    Is("u123").
+    Set(Users.Fields.Password).
+    To("updated").
+    Exec()
+                    </code></pre>
+                    </section>
+
+                    <!-- DELETE -->
+                    <section id="delete">
+                        <h2>Deleting Records (DELETE)</h2>
+
+                        <pre><code class="language-go">
+// Delete matching rows
+err := Users.Get().
+    Where(Users.Fields.UserId).
+    Is("u123").
+    Delete()
+                    </code></pre>
+                    </section>
+
+                    <!-- WHERE -->
+                    <section id="where">
+                        <h2>WHERE Conditions</h2>
+
+                        <pre><code class="language-go">
+Is(value)
+IsNot(value)
+GreaterThan(value)
+LessThan(value)
+GreaterThanOrEqual(value)
+LessThanOrEqual(value)
+Like(pattern)
+In(values...)
+NotIn(values...)
+Between(min, max)
+IsNull()
+IsNotNull()
+                    </code></pre>
+                    </section>
+
+                    <!-- LOGICAL -->
+                    <section id="logical">
+                        <h2>Combining Conditions</h2>
+
+                        <pre><code class="language-go">
+Users.Get().
+    Where(Users.Fields.UserName).Is("alice").
+    And().
+    Where(Users.Fields.UserId).Is("u123")
+
+Users.Get().
+    Where(Users.Fields.FirstName).Is("Alice").
+    Or().
+    Where(Users.Fields.FirstName).Is("Bob")
+                    </code></pre>
+                    </section>
+
+                    <!-- SORT -->
+                    <section id="sorting">
+                        <h2>Sorting & Grouping</h2>
+
+                        <pre><code class="language-go">
+OrderBy("createdAt DESC")
+GroupBy("status")
+                    </code></pre>
+                    </section>
+
+                    <!-- PAGINATION -->
+                    <section id="pagination">
+                        <h2>Pagination</h2>
+
+                        <pre><code class="language-go">
+Limit(20)
+Offset(40)
+
+// Page helper (1-indexed)
+Page(2, 20)
+                    </code></pre>
+                    </section>
+
+                    <!-- EXECUTION -->
+                    <section id="execution">
+                        <h2>Executing Queries</h2>
+
+                        <pre><code class="language-go">
+Fetch()   // returns []map[string]interface{}
+First()   // returns map[string]interface{}
+Exec()    // INSERT / UPDATE
+Delete()  // DELETE
+                    </code></pre>
+                    </section>
+
+                    <!-- NEXT -->
+                    <section>
+                        <h2>Next Steps</h2>
+                        <ul>
+                            <li><a href="../schema/">Schema Synchronization</a></li>
+                            <li><a href="../advanced/">Advanced Query Patterns</a></li>
+                            <li><a href="../best-practices/">Best Practices</a></li>
+                        </ul>
+                    </section>
+
+                </article>
+            </main>
+
+        </div>
+    </div>
+
+    <script src="../assets/js/Bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/navigations.js"></script>
+</body>
+
+</html>

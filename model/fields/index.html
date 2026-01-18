@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Fields – ModelsHandler</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap -->
+    <link href="../assets/css/Bootstrap/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Base styles -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/theme.css">
+</head>
+
+<body data-section="fields">
+
+<!-- HEADER -->
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="../index.html">ModelsHandler</a>
+        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#docsNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="docsNav" class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto" id="dynamic-top-nav"></ul>
+        </div>
+    </div>
+</nav>
+
+<!-- PAGE -->
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- SIDEBAR -->
+        <aside class="col-lg-3 col-xl-2 d-none d-lg-block docs-sidebar">
+            <nav id="dynamic-sidebar"></nav>
+        </aside>
+
+        <!-- CONTENT -->
+        <main class="col-lg-9 col-xl-10 docs-content">
+            <article class="docs-article">
+
+                <!-- INTRO -->
+                <section id="creating-fields">
+                    <h2>Creating Fields</h2>
+                    <p>
+                        Fields define the structure of your database columns.
+                        Every field is created using <code>model.CreateField()</code>
+                        and configured through a fluent, chainable API.
+                    </p>
+
+                    <pre><code class="language-go">
+model.CreateField()
+                    </code></pre>
+
+                    <p>
+                        A field definition typically consists of:
+                    </p>
+
+                    <ul>
+                        <li>A <strong>type</strong> (VARCHAR, INT, JSON, etc.)</li>
+                        <li>Optional <strong>constraints</strong> (NOT NULL, UNIQUE)</li>
+                        <li>Optional <strong>defaults</strong></li>
+                        <li>Optional <strong>indexes</strong></li>
+                    </ul>
+                </section>
+
+                <!-- FIELD TYPES -->
+                <section id="field-types">
+                    <h2>Field Types</h2>
+
+                    <h3>String & Text Types</h3>
+                    <pre><code class="language-go">
+AsChar(n)
+AsVarchar(n)
+AsTinyText()
+AsText()
+AsMediumText()
+AsLongText()
+                    </code></pre>
+
+                    <h3>Numeric Types</h3>
+                    <pre><code class="language-go">
+AsTinyInt()
+AsSmallInt()
+AsMediumInt()
+AsInt()
+AsBigInt()
+AsFloat()
+AsDouble()
+AsDecimal(precision)
+                    </code></pre>
+
+                    <h3>Boolean & UUID</h3>
+                    <pre><code class="language-go">
+AsBool()
+AsUUID()
+                    </code></pre>
+
+                    <h3>Date & Time</h3>
+                    <pre><code class="language-go">
+AsDate()
+AsTime()
+AsTimestamp()
+AsYear()
+                    </code></pre>
+
+                    <h3>JSON & Structured</h3>
+                    <pre><code class="language-go">
+AsJSON()
+AsEnum(values...)
+AsSet(values...)
+                    </code></pre>
+
+                    <h3>Binary & Blob</h3>
+                    <pre><code class="language-go">
+AsBlob()
+AsTinyBlob()
+AsMediumBlob()
+AsLongBlob()
+                    </code></pre>
+
+                    <h3>Geometry Types</h3>
+                    <pre><code class="language-go">
+AsGeometry()
+AsPoint()
+AsLineString()
+AsPolygon()
+                    </code></pre>
+                </section>
+
+                <!-- MODIFIERS -->
+                <section id="field-modifiers">
+                    <h2>Field Modifiers</h2>
+                    <p>
+                        Modifiers change how a field behaves in the database.
+                        They can be chained in any order.
+                    </p>
+
+                    <pre><code class="language-go">
+NotNull()
+IsPrimary()
+IsUnique()
+IsIndex()
+                    </code></pre>
+
+                    <p>
+                        By default, fields are nullable unless <code>NotNull()</code>
+                        is explicitly specified.
+                    </p>
+                </section>
+
+                <!-- DEFAULTS -->
+                <section id="defaults">
+                    <h2>Default Values</h2>
+                    <p>
+                        Default values are applied at the database level.
+                        ModelsHandler supports static and dynamic defaults.
+                    </p>
+
+                    <pre><code class="language-go">
+Default("guest")
+DefaultNull()
+DefaultNow()
+                    </code></pre>
+
+                    <p>
+                        <code>DefaultNow()</code> maps to <code>CURRENT_TIMESTAMP</code>
+                        for supported column types.
+                    </p>
+                </section>
+
+                <!-- INDEXES -->
+                <section id="indexes">
+                    <h2>Indexes & Keys</h2>
+                    <p>
+                        Indexes and keys are declared directly on fields.
+                        Schema synchronization ensures they stay in sync.
+                    </p>
+
+                    <pre><code class="language-go">
+IsPrimary()   // PRIMARY KEY
+IsUnique()    // UNIQUE INDEX
+IsIndex()     // NORMAL INDEX
+                    </code></pre>
+                </section>
+
+                <!-- EXAMPLES -->
+                <section id="examples">
+                    <h2>Examples</h2>
+
+                    <pre><code class="language-go">
+Email: model.CreateField().
+    AsVarchar(255).
+    NotNull().
+    IsUnique()
+
+CreatedAt: model.CreateField().
+    AsTimestamp().
+    DefaultNow().
+    NotNull()
+
+Metadata: model.CreateField().
+    AsJSON()
+
+Status: model.CreateField().
+    AsEnum("active", "inactive").
+    Default("'active'")
+                    </code></pre>
+                </section>
+
+                <!-- NEXT -->
+                <section>
+                    <h2>Next Steps</h2>
+                    <ul>
+                        <li><a href="../models/">Using Fields in Models</a></li>
+                        <li><a href="../queries/">Querying with Fields</a></li>
+                        <li><a href="../schema/">Schema Synchronization</a></li>
+                    </ul>
+                </section>
+
+            </article>
+        </main>
+
+    </div>
+</div>
+
+<script src="../assets/js/Bootstrap/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/navigations.js"></script>
+</body>
+
+</html>

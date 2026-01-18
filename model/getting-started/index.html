@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Getting Started – ModelsHandler</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap -->
+    <link href="../assets/css/Bootstrap/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Base styles -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/theme.css">
+</head>
+
+<body data-section="getting-started">
+    <main class="col-lg-9 col-xl-10 p-0 docs-content">
+
+
+        <!-- HEADER -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="../index.html">ModelsHandler</a>
+                <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#docsNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div id="docsNav" class="collapse navbar-collapse">
+                    <ul class="navbar-nav ms-auto" id="dynamic-top-nav"></ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- PAGE -->
+        <div class="container-fluid">
+            <div class="row">
+
+                <!-- SIDEBAR -->
+                <aside class="col-lg-3 col-xl-2 d-none d-lg-block docs-sidebar">
+                    <nav id="dynamic-sidebar"></nav>
+                </aside>
+
+
+                <!-- CONTENT -->
+                <main class="col-lg-9 col-xl-10 docs-content">
+                    <article class="docs-article">
+
+                        <section id="installation">
+                            <h2>Installation</h2>
+                            <p>
+                                Install ModelsHandler using <code>go get</code>:
+                            </p>
+
+                            <pre><code class="language-bash">
+go get github.com/vrianta/golang/model
+    </code></pre>
+                        </section>
+
+                        <section id="importing-package">
+                            <h2>Importing the Package</h2>
+                            <p>
+                                Import the package into your Go project where you define your models:
+                            </p>
+
+                            <pre>
+                                <code class="language-go">import "github.com/vrianta/golang/model"</code>
+                            </pre>
+
+                            <p>
+                                You can now start defining models using Go structs and the
+                                fluent field definition API.
+                            </p>
+                        </section>
+
+                        <section>
+                            <h2>Next Steps</h2>
+                            <p>
+                                From here, continue with:
+                            </p>
+
+                            <ul>
+                                <li><a href="../models/">Defining Models & Fields</a></li>
+                                <li><a href="../queries/">Building Queries</a></li>
+                                <li><a href="../schema/">Schema Synchronization</a></li>
+                            </ul>
+                        </section>
+
+                    </article>
+
+                </main>
+
+            </div>
+        </div>
+
+    </main>
+
+    <script src="../assets/js/Bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/navigations.js"></script>
+</body>
+
+</html>

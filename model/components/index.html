@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Components – ModelsHandler</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap -->
+    <link href="../assets/css/Bootstrap/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Base styles -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/theme.css">
+</head>
+
+<body data-section="components">
+
+    <!-- HEADER -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">ModelsHandler</a>
+            <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#docsNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div id="docsNav" class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto" id="dynamic-top-nav"></ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PAGE -->
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- SIDEBAR -->
+            <aside class="col-lg-3 col-xl-2 d-none d-lg-block docs-sidebar">
+                <nav id="dynamic-sidebar"></nav>
+            </aside>
+
+            <!-- CONTENT -->
+            <main class="col-lg-9 col-xl-10 docs-content">
+                <article class="docs-article">
+
+                    <!-- WHAT -->
+                    <section id="what-are-components">
+                        <h2>What Are Components?</h2>
+                        <p>
+                            Components are a higher-level data system built on top of
+                            ModelsHandler that allow you to define, persist, and
+                            synchronize structured table data across disk and database.
+                        </p>
+
+                        <p>
+                            Unlike models and fields, which define <em>structure</em>,
+                            components represent <strong>actual data</strong> that is:
+                        </p>
+
+                        <ul>
+                            <li>Associated with a specific model (table)</li>
+                            <li>Stored in both JSON files and the database</li>
+                            <li>Kept in sync through a controlled synchronization process</li>
+                        </ul>
+
+                        <p>
+                            Components are ideal for configuration tables, lookup data,
+                            seed data, or any dataset that must remain consistent across
+                            environments.
+                        </p>
+                    </section>
+
+                    <!-- STRUCTURE -->
+                    <section id="component-structure">
+                        <h2>Component Structure</h2>
+                        <p>
+                            Internally, a component is a map of field names to values.
+                            A collection of components is keyed by the model’s primary key.
+                        </p>
+
+                        <pre><code class="language-go">
+// Single component
+map[string]any
+
+// Component collection
+map[string]map[string]any
+                    </code></pre>
+
+                        <p>
+                            Each component entry represents one row in the associated table.
+                            The key of the component map corresponds to the table’s primary key.
+                        </p>
+                    </section>
+
+                    <!-- DISK -->
+                    <section id="disk-representation">
+                        <h2>Disk Representation</h2>
+                        <p>
+                            Components are stored on disk as JSON files, one per model.
+                        </p>
+
+                        <pre><code class="language-text">
+components/
+└── users.component.json
+                    </code></pre>
+
+                        <p>
+                            Example structure:
+                        </p>
+
+                        <pre><code class="language-json">
+{
+  "1": {
+    "name": "Admin",
+    "role": "admin"
+  },
+  "2": {
+    "name": "Guest",
+    "role": "guest"
+  }
+}
+                    </code></pre>
+
+                        <p>
+                            These files act as the local editable representation of
+                            component data.
+                        </p>
+                    </section>
+
+                    <!-- SYNC -->
+                    <section id="sync-behavior">
+                        <h2>Component Synchronization</h2>
+                        <p>
+                            Component synchronization ensures that local JSON components
+                            and database rows remain consistent.
+                        </p>
+
+                        <p>
+                            The synchronization process follows strict rules:
+                        </p>
+
+                        <ol>
+                            <li>If no local components exist, no sync occurs</li>
+                            <li>If the database is empty, local components are inserted</li>
+                            <li>Missing database rows are added</li>
+                            <li>Stale database rows are removed</li>
+                            <li>The database becomes the final source of truth</li>
+                            <li>The local JSON file is rewritten from the database</li>
+                        </ol>
+
+                        <p>
+                            This guarantees deterministic state after synchronization.
+                        </p>
+                    </section>
+
+                    <!-- REFRESH -->
+                    <section id="refresh-behavior">
+                        <h2>Refreshing from Database</h2>
+                        <p>
+                            Components can also be refreshed directly from the database.
+                            This rewrites the local JSON file using the current database state.
+                        </p>
+
+                        <p>
+                            If the database is empty but local components exist,
+                            the system will prompt for confirmation before
+                            pushing local data into the database.
+                        </p>
+
+                        <p>
+                            This safeguard prevents accidental data loss.
+                        </p>
+                    </section>
+
+                    <!-- ACCESS -->
+                    <section id="accessing-components">
+                        <h2>Accessing Components</h2>
+                        <p>
+                            Components are accessible through the model instance.
+                        </p>
+
+                        <pre><code class="language-go">
+components := Users.GetComponents()
+
+component, ok := Users.GetComponent("1")
+                    </code></pre>
+
+                        <p>
+                            Individual field values can be retrieved safely:
+                        </p>
+
+                        <pre><code class="language-go">
+value, ok := component.FieldValue("role")
+                    </code></pre>
+                    </section>
+
+                    <!-- UPDATE -->
+                    <section id="updating-components">
+                        <h2>Updating Components</h2>
+                        <p>
+                            Updating a component updates both the in-memory representation
+                            and the corresponding database row.
+                        </p>
+
+                        <p>
+                            Updates are executed using the query builder internally,
+                            ensuring consistency with all model constraints.
+                        </p>
+
+                        <pre><code class="language-go">
+err := Users.UpdateComponent("1", component)
+                    </code></pre>
+
+                        <p>
+                            After a successful update, the local JSON file is also updated.
+                        </p>
+                    </section>
+
+                    <!-- GUIDELINES -->
+                    <section id="usage-guidelines">
+                        <h2>Usage Guidelines</h2>
+                        <ul>
+                            <li>Components require a primary key</li>
+                            <li>Each model owns its components entirely</li>
+                            <li>Use components for authoritative datasets</li>
+                            <li>Avoid using components for high-churn transactional data</li>
+                            <li>Review synchronization effects before production use</li>
+                        </ul>
+                    </section>
+                    <section id="component-migration-flags">
+                        <h2>Component Migration Flags</h2>
+
+                        <p>
+                            Component synchronization is triggered explicitly using
+                            command-line flags when running your application.
+                        </p>
+
+                        <h3><code>--migrate-component</code></h3>
+                        <p>
+                            Synchronizes component JSON files with the database for all
+                            models that define components.
+                        </p>
+
+                        <pre><code class="language-bash">
+go run . --migrate-component
+    </code></pre>
+
+                        <h3><code>-mc</code></h3>
+                        <p>
+                            Shorthand alias for <code>--migrate-component</code>.
+                        </p>
+
+                        <pre><code class="language-bash">
+go run . -mc
+    </code></pre>
+
+                        <p>
+                            When these flags are used, ModelsHandler performs a controlled
+                            synchronization between local component files and database rows.
+                            Without these flags, no component migration is performed.
+                        </p>
+
+                        <p>
+                            Component migration is independent from schema migration and
+                            does not modify table structures.
+                        </p>
+                    </section>
+
+
+                    <!-- NEXT -->
+                    <section>
+                        <h2>Next Steps</h2>
+                        <ul>
+                            <li><a href="../best-practices/">Best Practices</a></li>
+                        </ul>
+                    </section>
+
+                </article>
+            </main>
+
+        </div>
+    </div>
+
+    <script src="../assets/js/Bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/navigations.js"></script>
+</body>
+
+</html>
