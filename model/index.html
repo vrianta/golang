@@ -8,24 +8,26 @@
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom Styles -->
-    <link href="assets/css/style.css" rel="stylesheet">
-     <link href="assets/css/theme.css" rel="stylesheet">
-
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/theme.css" rel="stylesheet">
 </head>
+
 <body>
 
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom fixed-top">
+<nav class="navbar navbar-expand-lg fixed-top border-bottom">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="index.html">ModelsHandler</a>
+        <a class="navbar-brand fw-semibold" href="index.html">ModelsHandler</a>
         <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div id="nav" class="collapse navbar-collapse">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto gap-lg-2">
                 <li class="nav-item"><a class="nav-link" href="getting-started/">Getting Started</a></li>
                 <li class="nav-item"><a class="nav-link" href="models/">Models</a></li>
                 <li class="nav-item"><a class="nav-link" href="queries/">Queries</a></li>
@@ -37,103 +39,158 @@
 </nav>
 
 <!-- HERO -->
-<section class="hero-section">
-    <div class="container text-center">
-        <h1 class="hero-title">ModelsHandler</h1>
-        <p class="hero-subtitle">
-            A human-friendly, chainable ORM-like query builder for Go.<br>
-            Clean models. Fluent queries. Automatic schema sync.
+<section class="py-5 mt-5">
+    <div class="container text-center py-5">
+        <span class="badge bg-primary-subtle text-primary mb-3">Go ORM-like Query Builder</span>
+
+        <h1 class="display-5 fw-bold mt-3">
+            ModelsHandler
+        </h1>
+
+        <p class="lead text-muted mt-3 mx-auto" style="max-width: 680px;">
+            A human-friendly, chainable ORM-like query builder for Go.
+            Define clean models, build fluent queries, and keep your
+            database schema in sync — without magic.
         </p>
-        <div class="mt-4">
-            <a href="getting-started/" class="btn btn-primary btn-lg me-3">Get Started</a>
-            <a href="queries/" class="btn btn-outline-secondary btn-lg">Query API</a>
+
+        <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+            <a href="getting-started/" class="btn btn-primary btn-lg px-4">
+                Get Started
+            </a>
+            <a href="queries/" class="btn btn-outline-secondary btn-lg px-4">
+                Query API
+            </a>
         </div>
     </div>
 </section>
 
 <!-- FEATURES -->
 <section class="container py-5">
-    <div class="row text-center mb-4">
+    <div class="text-center mb-5">
         <h2 class="fw-semibold">Why ModelsHandler?</h2>
-        <p class="text-muted">Designed for clarity, safety, and developer happiness</p>
+        <p class="text-muted mt-2">
+            Designed for clarity, safety, and developer happiness
+        </p>
     </div>
 
     <div class="row g-4">
         <div class="col-md-4">
-            <div class="feature-card">
-                <h5>Fluent Query Builder</h5>
-                <p>Chainable API for SELECT, INSERT, UPDATE, DELETE with zero SQL strings.</p>
+            <div class="h-100 p-4 border rounded-3">
+                <h5 class="fw-semibold mb-2">Fluent Query Builder</h5>
+                <p class="text-muted mb-0">
+                    Chainable API for SELECT, INSERT, UPDATE, and DELETE
+                    without writing fragile SQL strings.
+                </p>
             </div>
         </div>
+
         <div class="col-md-4">
-            <div class="feature-card">
-                <h5>Schema Synchronization</h5>
-                <p>Automatic database migration based on Go model definitions.</p>
+            <div class="h-100 p-4 border rounded-3">
+                <h5 class="fw-semibold mb-2">Schema Synchronization</h5>
+                <p class="text-muted mb-0">
+                    Automatically migrate database schemas based on
+                    your Go model definitions.
+                </p>
             </div>
         </div>
+
         <div class="col-md-4">
-            <div class="feature-card">
-                <h5>Type-Safe Fields</h5>
-                <p>Strongly typed field references instead of fragile string names.</p>
+            <div class="h-100 p-4 border rounded-3">
+                <h5 class="fw-semibold mb-2">Type-Safe Fields</h5>
+                <p class="text-muted mb-0">
+                    Use strongly typed field references instead of
+                    error-prone string column names.
+                </p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- DOC SECTIONS -->
+<!-- DOCUMENTATION -->
 <section class="container pb-5">
-    <h2 class="fw-semibold mb-4 text-center">Documentation</h2>
+    <div class="text-center mb-5">
+        <h2 class="fw-semibold">Documentation</h2>
+        <p class="text-muted mt-2">
+            Everything you need to build confidently with ModelsHandler
+        </p>
+    </div>
 
     <div class="row g-4">
         <div class="col-md-6 col-lg-4">
-            <a href="getting-started/" class="doc-card">
-                <h5>Getting Started</h5>
-                <p>Installation, setup, and first model.</p>
+            <a href="getting-started/" class="text-decoration-none">
+                <div class="h-100 p-4 border rounded-3">
+                    <h5 class="fw-semibold">Getting Started</h5>
+                    <p class="text-muted mb-0">
+                        Installation, setup, and your first model.
+                    </p>
+                </div>
             </a>
         </div>
 
         <div class="col-md-6 col-lg-4">
-            <a href="models/" class="doc-card">
-                <h5>Models & Fields</h5>
-                <p>Defining models, field types, and structure.</p>
+            <a href="models/" class="text-decoration-none">
+                <div class="h-100 p-4 border rounded-3">
+                    <h5 class="fw-semibold">Models & Fields</h5>
+                    <p class="text-muted mb-0">
+                        Defining models, field types, and structure.
+                    </p>
+                </div>
             </a>
         </div>
 
         <div class="col-md-6 col-lg-4">
-            <a href="queries/" class="doc-card">
-                <h5>Query Builder</h5>
-                <p>CRUD operations, WHERE conditions, pagination.</p>
+            <a href="queries/" class="text-decoration-none">
+                <div class="h-100 p-4 border rounded-3">
+                    <h5 class="fw-semibold">Query Builder</h5>
+                    <p class="text-muted mb-0">
+                        CRUD operations, filters, pagination, and more.
+                    </p>
+                </div>
             </a>
         </div>
 
         <div class="col-md-6 col-lg-4">
-            <a href="schema/" class="doc-card">
-                <h5>Schema Sync</h5>
-                <p>Automatic migrations and schema evolution.</p>
+            <a href="schema/" class="text-decoration-none">
+                <div class="h-100 p-4 border rounded-3">
+                    <h5 class="fw-semibold">Schema Sync</h5>
+                    <p class="text-muted mb-0">
+                        Automatic migrations and schema evolution.
+                    </p>
+                </div>
             </a>
         </div>
 
         <div class="col-md-6 col-lg-4">
-            <a href="advanced/" class="doc-card">
-                <h5>Advanced Usage</h5>
-                <p>Complex queries, batch operations, optimization.</p>
+            <a href="advanced/" class="text-decoration-none">
+                <div class="h-100 p-4 border rounded-3">
+                    <h5 class="fw-semibold">Advanced Usage</h5>
+                    <p class="text-muted mb-0">
+                        Complex queries, batch operations, optimization.
+                    </p>
+                </div>
             </a>
         </div>
 
         <div class="col-md-6 col-lg-4">
-            <a href="best-practices/" class="doc-card">
-                <h5>Best Practices</h5>
-                <p>Performance, safety, and real-world patterns.</p>
+            <a href="best-practices/" class="text-decoration-none">
+                <div class="h-100 p-4 border rounded-3">
+                    <h5 class="fw-semibold">Best Practices</h5>
+                    <p class="text-muted mb-0">
+                        Performance, safety, and real-world patterns.
+                    </p>
+                </div>
             </a>
         </div>
     </div>
 </section>
 
 <!-- FOOTER -->
-<footer class="footer">
+<footer class="border-top py-4">
     <div class="container text-center">
-        <p class="mb-1">ModelsHandler © 2026</p>
-        <small class="text-muted">MIT License · Built for Go developers</small>
+        <p class="mb-1 fw-medium">ModelsHandler © 2026</p>
+        <small class="text-muted">
+            MIT License · Built for Go developers
+        </small>
     </div>
 </footer>
 
