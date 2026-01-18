@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>ModelsHandler Documentation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<style>
+:root {
+  --bg: #0f172a;
+  --panel: #111827;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --accent: #3b82f6;
+  --code: #020617;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+#sidebar {
+  width: 280px;
+  background: var(--panel);
+  padding: 20px;
+  overflow-y: auto;
+  border-right: 1px solid #1f2937;
+}
+
+#sidebar h1 {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.nav-link {
+  display: block;
+  padding: 8px 10px;
+  margin-bottom: 4px;
+  color: var(--muted);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  background: #1f2937;
+  color: var(--accent);
+}
+
+/* Content */
+#content {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+section {
+  margin-bottom: 80px;
+}
+
+section h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #1f2937;
+  padding-bottom: 8px;
+}
+
+section p {
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+pre {
+  background: var(--code);
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin-top: 12px;
+}
+
+code {
+  color: #93c5fd;
+  font-family: monospace;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  #sidebar {
+    display: none;
+  }
+  body {
+    flex-direction: column;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<div id="sidebar">
+  <h1>📘 ModelsHandler</h1>
+  <nav id="nav"></nav>
+</div>
+
+<!-- Content -->
+<main id="content"></main>
+
+
+<script src="./assests/js/contents.js"></script>
+
+<script>
+
+const nav = document.getElementById("nav")
+const content = document.getElementById("content")
+
+docs.forEach(section => {
+  // Sidebar link
+  const link = document.createElement("a")
+  link.href = "#" + section.id
+  link.className = "nav-link"
+  link.textContent = section.title
+  nav.appendChild(link)
+
+  // Content section
+  const sec = document.createElement("section")
+  sec.id = section.id
+  sec.innerHTML = `<h2>${section.title}</h2>${section.content}`
+  content.appendChild(sec)
+})
+
+// Active link highlighting
+const links = document.querySelectorAll(".nav-link")
+window.addEventListener("scroll", () => {
+  let fromTop = window.scrollY + 100
+  links.forEach(link => {
+    let section = document.querySelector(link.getAttribute("href"))
+    if (
+      section.offsetTop <= fromTop &&
+      section.offsetTop + section.offsetHeight > fromTop
+    ) {
+      link.classList.add("active")
+    } else {
+      link.classList.remove("active")
+    }
+  })
+})
+</script>
+
+
+</body>
+</html>
