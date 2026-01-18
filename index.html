@@ -1,126 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>vrianta/golang</title>
 
-  <!-- Bootstrap CSS -->
+  <!-- Bootstrap -->
   <link href="assets/css/Bootstrap/bootstrap.min.css" rel="stylesheet">
 
-  <!-- Custom Styles -->
+  <!-- Custom Theme -->
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 
 <body>
 
-  <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg border-bottom">
-    <div class="container-fluid px-4 py-2">
-      <span class="logo fw-semibold">vrianta/golang</span>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+  <div class="container-fluid px-4 py-3">
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+    <a class="navbar-brand fw-semibold" href="/">
+      vrianta<span class="accent">/golang</span>
+    </a>
 
-      <div class="collapse navbar-collapse" id="nav">
-        <div class="nav-right ms-auto d-flex gap-4 align-items-center">
-          <a href="#about">About</a>
-          <a href="#tools">Tools</a>
-          <a href="https://github.com/vrianta/golang" target="_blank">GitHub</a>
-        </div>
-      </div>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
+        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#tools">Tools</a></li>
+        <li class="nav-item">
+          <a class="nav-link github" href="https://github.com/vrianta/golang" target="_blank">
+            GitHub
+          </a>
+        </li>
+      </ul>
     </div>
-  </nav>
 
-  <!-- HERO -->
-  <section id="hero" class="container-fluid py-5 mt-4">
-    <div class="container py-5">
-      <h1 class="display-5 fw-bold mb-3">
-        Production-Grade Go Utilities
-      </h1>
+  </div>
+</nav>
 
-      <p class="lead text-muted mb-4" style="max-width: 620px;">
-        A modular Golang toolkit where each tool owns its
-        documentation, lifecycle, and evolution.
-      </p>
 
-      <div class="d-flex gap-3 flex-wrap">
-        <a href="#tools" class="btn primary px-4 py-2">
-          View Tools
-        </a>
-        <a href="/golang/model" class="btn secondary px-4 py-2">
-          Read Docs
-        </a>
-      </div>
+<!-- HERO -->
+<section class="container-fluid py-5 mt-4">
+  <div class="container py-5">
+    <h1 class="fw-bold mb-3">
+      Production-Grade Go Utilities
+    </h1>
+
+    <p class="lead text-muted mb-4" style="max-width: 640px;">
+      A modular Golang toolkit where each tool owns its documentation,
+      lifecycle, and evolution.
+    </p>
+
+    <div class="d-flex gap-3 flex-wrap">
+      <a href="#tools" class="btn primary">View Tools</a>
+      <a href="/golang/model" class="btn secondary">Read Docs</a>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ABOUT -->
-  <section id="about" class="container-fluid py-5">
-    <div class="container">
-      <h2 class="fw-semibold mb-3">What is this repository?</h2>
-      <p class="text-muted" style="max-width: 720px;">
-        <strong>vrianta/golang</strong> is a growing collection of
-        production-ready Go tools designed with clarity, composability,
-        and long-term maintainability in mind.
-      </p>
-    </div>
-  </section>
+<!-- ABOUT -->
+<section id="about" class="container-fluid section">
+  <div class="container">
+    <h2 class="mb-3">What is this repository?</h2>
+    <p class="text-muted" style="max-width: 720px;">
+      <strong>vrianta/golang</strong> is a growing collection of
+      production-ready Go tools designed for clarity,
+      composability, and long-term maintainability.
+    </p>
+  </div>
+</section>
 
-  <!-- TOOLS -->
-  <section id="tools" class="container-fluid py-5 dark">
-    <div class="container">
-      <h2 class="fw-semibold mb-4">Current Tooling</h2>
+<!-- TOOLS -->
+<section id="tools" class="container-fluid section dark">
+  <div class="container">
+    <h2 class="mb-4">Current Tooling</h2>
 
-      <div class="row">
-        <div class="col-12 col-lg-8">
-          <div class="tool-card p-4 h-100">
-            <div class="d-flex justify-content-between align-items-start mb-3">
-              <h3 class="fw-semibold mb-0">Model Handler</h3>
-              <span class="path">/model</span>
-            </div>
+    <div class="row gy-4">
+      <div class="col-12 col-lg-8">
+        <div class="tool-card h-100">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <h3 class="mb-0">Model Handler</h3>
+            <span class="path">/model</span>
+          </div>
 
-            <p class="text-muted mb-3">
-              A clean abstraction layer for working with models in Go —
-              designed for execution, safety, and extensibility.
-            </p>
+          <p class="text-muted mb-3">
+            A clean abstraction layer for working with models in Go —
+            designed for execution, safety, and extensibility.
+          </p>
 
-            <ul class="mb-4">
-              <li>✔️ Modular design</li>
-              <li>✔️ Production-oriented</li>
-              <li>✔️ Directory-based documentation</li>
-            </ul>
+          <ul class="list-unstyled mb-4">
+            <li>✔ Modular design</li>
+            <li>✔ Production-oriented</li>
+            <li>✔ Directory-based documentation</li>
+          </ul>
 
-            <div class="tool-actions d-flex gap-3 flex-wrap">
-              <a href="/golang/model" class="btn primary">
-                View Docs
-              </a>
-              <a href="https://github.com/vrianta/golang/tree/main/model"
-                 class="btn secondary"
-                 target="_blank">
-                View Source
-              </a>
-            </div>
+          <div class="d-flex gap-3 flex-wrap">
+            <a href="/golang/model" class="btn primary">View Docs</a>
+            <a href="https://github.com/vrianta/golang/tree/main/model"
+               class="btn secondary" target="_blank">
+              View Source
+            </a>
           </div>
         </div>
       </div>
-
     </div>
-  </section>
 
-  <!-- FOOTER -->
-  <footer class="footer py-4">
-    <div class="container">
-      <p class="mb-0 text-muted">
-        Docs follow the code.<br />
-        Built with Go • Designed by vrianta
-      </p>
-    </div>
-  </footer>
+  </div>
+</section>
 
-  <script src="assets/js/Bootstrap/bootstrap.bundle.min.js"></script>
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <p class="mb-0 text-muted">
+      Docs follow the code.<br />
+      Built with Go • Designed by vrianta
+    </p>
+  </div>
+</footer>
+
+<script src="assets/js/Bootstrap/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
