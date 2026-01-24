@@ -4,7 +4,6 @@ import (
 	"fmt"
 )
 
-// function to add the new field in the table
 func (m *meta) addField(field *Field) {
 	/*
 		ALTER TABLE `users`
@@ -12,13 +11,13 @@ func (m *meta) addField(field *Field) {
 		ADD INDEX (`newel`);
 	*/
 
-	response := "ALTER TABLE `" + m.TableName + "`\n"
-	response += "ADD " + field.columnDefinition() + field.addIndexStatement() + ";"
+	query := "ALTER TABLE `" + m.TableName + "`\n"
+	query += "ADD " + field.columnDefinition() + ", ADD CONSTRAINT " + field.addIndexStatement() + ";"
 
 	if err := m.db.Ping(); err != nil {
 		panic("Error While Adding new Field to the table" + err.Error())
 	} else {
-		if _, sql_err := m.db.Exec(response); sql_err != nil {
+		if _, sql_err := m.db.Exec(query); sql_err != nil {
 			panic("Error While Updating the Table Field" + sql_err.Error())
 		} else {
 			fmt.Printf("[AddField]      Table: %-20s | Field Added: %-20s\n", m.TableName, field.name)
