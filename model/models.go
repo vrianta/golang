@@ -261,7 +261,7 @@ func (m *meta) CreateTableIfNotExists() {
 	}
 
 	for _, field := range m.FieldTypes {
-		indexStatements := field.addIndexStatement()
+		indexStatements := field.createIndexStatements()
 		if indexStatements != "" {
 			fieldDefs = append(fieldDefs, indexStatements)
 		}
