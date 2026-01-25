@@ -12,7 +12,7 @@ func (m *meta) addField(field *Field) {
 	*/
 
 	query := "ALTER TABLE `" + m.TableName + "`\n"
-	query += "ADD " + field.columnDefinition() + ", " + field.addIndexStatement() + ";"
+	query += "ADD " + field.columnDefinition() + field.addIndexStatement() + ";"
 
 	if err := m.db.Ping(); err != nil {
 		panic("Error While Adding new Field to the table" + err.Error())
