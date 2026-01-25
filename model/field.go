@@ -321,7 +321,7 @@ func (f *Field) addIndexStatement() string {
 	}
 
 	if f.fk != nil {
-		responseArray = append(responseArray, f.foreignKeyConstraint())
+		responseArray = append(responseArray, "ADD "+f.foreignKeyConstraint())
 	}
 
 	if len(responseArray) > 0 {
