@@ -274,19 +274,20 @@ func (f *Field) columnDefinition() string {
 func (f *Field) addIndexStatement() string {
 	responseArray := []string{}
 	if f.index.PrimaryKey {
-		responseArray = append(responseArray, "Primary Key pk_"+string(f.name)+" ("+string(f.name)+")")
+		responseArray = append(responseArray, "Primary Key pk_"+f.table_name+"_"+string(f.name)+" ("+string(f.name)+")")
 	}
 	if f.index.Index {
-		responseArray = append(responseArray, "INDEX idx_"+string(f.name)+" ("+string(f.name)+")")
+		responseArray = append(responseArray, "INDEX idx_"+f.table_name+"_"+string(f.name)+" ("+string(f.name)+")")
 	}
 	if f.index.FullText {
-		responseArray = append(responseArray, "FULLTEXT ftxt_"+string(f.name)+" ("+string(f.name)+")")
+		responseArray = append(responseArray, "FULLTEXT ftxt_"+f.table_name+"_"+string(f.name)+" ("+string(f.name)+")")
+
 	}
 	if f.index.Spatial {
-		responseArray = append(responseArray, "SPATIAL sp_"+string(f.name)+" ("+string(f.name)+")")
+		responseArray = append(responseArray, "SPATIAL sp_"+f.table_name+"_"+string(f.name)+" ("+string(f.name)+")")
 	}
 	if f.index.Unique {
-		responseArray = append(responseArray, "UNIQUE unq_"+string(f.name)+" ("+string(f.name)+")")
+		responseArray = append(responseArray, "UNIQUE unq_"+f.table_name+"_"+string(f.name)+" ("+string(f.name)+")")
 	}
 
 	if f.fk != nil {
@@ -461,8 +462,8 @@ func (f *Field) foreignKeyConstraint() string {
 		return ""
 	}
 
-	stmt := fmt.Sprintf("CONSTRAINT fk_%s FOREIGN KEY (%s) REFERENCES %s(%s)",
-		f.name, f.name, f.table_name, f.name)
+	stmt := fmt.Sprintf("CONSTRAINT fk_%s_%s FOREIGN KEY (%s) REFERENCES %s(%s)",
+		f.table_name, f.name, f.name, f.fk.referenceTable, f.fk.referenceColumn)
 
 	if f.fk.onDelete != "" {
 		stmt += " ON DELETE " + f.fk.onDelete

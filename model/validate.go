@@ -50,8 +50,8 @@ func (m *meta) validate() {
 					panic(fmt.Sprintf("[Validation Error] Field '%s' in Table '%s' cannot be both PRIMARY KEY and UNIQUE.", f.name, m.TableName))
 				}
 				// for primry key the types allowed are varchat or int
-				if f.t != FieldTypes.Int && f.t != FieldTypes.VarChar {
-					panic(fmt.Sprintf("[Validation Error] Field '%s' in Table '%s' cannot be both PRIMARY KEY and UNIQUE.", f.name, m.TableName))
+				if f.t.IsNumeric() {
+					panic(fmt.Sprintf("[Validation Error] Field '%s' in Table '%s' cannot %s.", f.name, m.TableName, f.t.string()))
 				}
 
 				mu.Lock()
@@ -70,9 +70,6 @@ func (m *meta) validate() {
 			if f.autoIncrement {
 				if !f.index.PrimaryKey {
 					panic(fmt.Sprintf("[Validation Error] Field '%s' in Table '%s' is AUTO_INCREMENT but not PRIMARY KEY.", f.name, m.TableName))
-				}
-				if !strings.HasPrefix(strings.ToLower(f.t.string()), "int") {
-					panic(fmt.Sprintf("[Validation Error] Field '%s' in Table '%s' is AUTO_INCREMENT but not of integer type.", f.name, m.TableName))
 				}
 			}
 
@@ -122,7 +119,7 @@ func (f Field) Validate() {
 		if f.lenth < 6 {
 			panic(fmt.Sprintf("Field '%s': MEDIUMINT length must be at least 6", f.name))
 		}
-	case FieldTypes.Int, FieldTypes.BigInt:
+	case FieldTypes.Int:
 		if f.lenth < 1 {
 			panic(fmt.Sprintf("Field '%s': %s must have a positive length", f.name, f.t.string()))
 		}

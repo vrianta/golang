@@ -342,7 +342,7 @@ func (m *meta) syncIndex(field *Field, schema *schema) {
 		fmt.Println("Error updating index:", err)
 		return
 	}
-	indexName := fmt.Sprintf("idx_%s", field.name)
+	indexName := fmt.Sprintf("idx_%s_%s", m.TableName, field.name)
 	if schema.isindex && !field.index.Index {
 		// Drop index
 		queryBuilder := fmt.Sprintf("ALTER TABLE `%s` DROP INDEX `%s`;", m.TableName, indexName)
