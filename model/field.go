@@ -297,10 +297,14 @@ func (f *Field) createIndexStatements() string {
 		responseArray = append(responseArray, f.foreignKeyConstraint())
 	}
 
-	return strings.Join(responseArray, ",\n")
+	if len(responseArray) > 0 {
+		return strings.Join(responseArray, ",\n")
+	}
+
+	return ""
 }
 
-// Index Statements with ADD in it
+// Return -> Index Statements suitable for altering the table
 func (f *Field) addIndexStatement() string {
 	responseArray := []string{}
 	if f.index.PrimaryKey {

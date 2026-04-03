@@ -120,6 +120,39 @@ func (m *meta) SyncComponentWithDB() error {
 		}
 	}
 
+	// Update existing components if they differ
+	for k, localComponent := range m.components {
+		if m.primary.t == FieldTypes.Int {
+			if int_k, err := strconv.Atoi(k); err != nil {
+				return err
+			} else {
+				if dbComponent, ok := dbResults[int64(int_k)]; ok {
+					if !componentsEqual(localComponent, component(dbComponent)) {
+						fmt.Printf("[component] Updating component %s in table %s (data differs)", k, m.TableName)
+						if err := m.UpdateComponent(k, localComponent); err != nil {
+							fmt.Errorf("[component] Failed to update component %s: %v", k, err)
+							return err
+						}
+						// Update the dbResults with the new data
+						dbResults[int64(int_k)] = Result(localComponent)
+					}
+				}
+			}
+		} else {
+			if dbComponent, ok := dbResults[k]; ok {
+				if !componentsEqual(localComponent, component(dbComponent)) {
+					fmt.Printf("[component] Updating component '%s' in table %s (data differs)", k, m.TableName)
+					if err := m.UpdateComponent(k, localComponent); err != nil {
+						fmt.Errorf("[component] Failed to update component %s: %v", k, err)
+						return err
+					}
+					// Update the dbResults with the new data
+					dbResults[k] = Result(localComponent)
+				}
+			}
+		}
+	}
+
 	// Remove stale
 	for k := range dbResults {
 		if _, ok := m.components[fmt.Sprint(k)]; !ok {
@@ -222,6 +255,36 @@ func (c component) FieldValue(field string) (any, bool) {
 	return val, ok
 }
 
-func (c component) UpdateFieldValue(field string, value any) {
+/*
+ * Converting the any datatype to result of possible
+ **/
+func MakeResult(data any) (Result, error) {
+	if res, ok := data.(Result); ok {
+		return res, nil
+	} else if res, ok := data.(map[string]interface{}); ok {
+		return Result(res), nil
+	} else {
+		return nil, fmt.Errorf("cannot convert to Result")
+	}
+}
 
+// componentsEqual compares two components to check if they have the same data
+func componentsEqual(c1, c2 component) bool {
+	if len(c1) != len(c2) {
+		return false
+	}
+
+	for key, val1 := range c1 {
+		val2, exists := c2[key]
+		if !exists {
+			return false
+		}
+
+		// Compare values (basic comparison, can be enhanced for complex types)
+		if val1 != val2 {
+			return false
+		}
+	}
+
+	return true
 }

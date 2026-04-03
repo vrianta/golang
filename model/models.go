@@ -282,6 +282,7 @@ func (m *meta) CreateTableIfNotExists() {
 	} else {
 		fmt.Printf("[Models] Table '%s' ensured to exist.\n", m.TableName)
 	}
+
 }
 
 // Handles adding/dropping PRIMARY KEY
@@ -377,21 +378,26 @@ func (m *meta) GetTableName() string {
 // 	response := make(map[string]any, len(m.FieldTypes))
 // 	var wg sync.WaitGroup
 // 	var mu sync.Mutex
+
 // 	for _, field := range m.FieldTypes {
 // 		wg.Add(1)
+
 // 		go func(f *Field) {
 // 			defer wg.Done()
+
 // 			var value any
 // 			if f.value != nil {
 // 				value = f.value
 // 			} else {
 // 				value = nil
 // 			}
+
 // 			mu.Lock()
 // 			response[f.Name] = value
 // 			mu.Unlock()
 // 		}(&field)
 // 	}
+
 // 	wg.Wait()
 // 	return response
 // }
@@ -429,6 +435,26 @@ func (m *meta) HasPrimaryKey() bool {
 	}
 
 	return false
+}
+
+/*
+GetField(fieldname) -> return pointer of the field
+*/
+
+func (m *meta) GetField(field_name string) *Field {
+	field, ok := m.FieldTypes[field_name]
+	if !ok {
+		return nil
+	}
+	return field
+}
+
+/*
+GetField(fieldname) -> return pointer of the field
+*/
+
+func (m *meta) GetFieldTypes() *fieldTypeset {
+	return &m.FieldTypes
 }
 
 // Print the Objects of the models as the good for debug perpose

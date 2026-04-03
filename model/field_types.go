@@ -12,24 +12,24 @@ func (f fieldType) string() string {
 		return "TEXT"
 	case FieldTypes.Int:
 		return "INT"
-	case FieldTypes.BigInt:
-		return "BIGINT"
 	case FieldTypes.Float:
 		return "FLOAT"
 	case FieldTypes.Decimal:
 		return "DECIMAL(10,2)"
 	case FieldTypes.Bool:
 		return "BOOLEAN"
+	case FieldTypes.BigInt:
+		return "BIGINT"
 	case FieldTypes.TinyInt:
 		return "TINYINT"
 	case FieldTypes.Date:
 		return "DATE"
 	case FieldTypes.Time:
-		return "TIME"
+		return "DATETIME"
 	case FieldTypes.Timestamp:
 		return "TIMESTAMP"
 	case FieldTypes.JSON:
-		return "JSON"
+		return "LONGTEXT"
 	case FieldTypes.Enum:
 		return "ENUM" // You can customize enum values at the field level
 	case FieldTypes.Binary:

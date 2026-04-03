@@ -17,6 +17,10 @@ func (m *meta) addField(field *Field) {
 	if err := m.db.Ping(); err != nil {
 		panic("Error While Adding new Field to the table" + err.Error())
 	} else {
+		// add migration schemas while SyncDatabaseEnabled enabled
+		if syncDatabaseEnabled {
+			recordMigrationSchema(query)
+		}
 		if _, sql_err := m.db.Exec(query); sql_err != nil {
 			panic("Error While Updating the Table Field" + sql_err.Error())
 		} else {
@@ -30,8 +34,10 @@ func (m *meta) modifyDBField(field *Field) {
 	// ALTER TABLE `users` CHANGE `userId` `userId` INT(30) NOT NULL AUTO_INCREMENT;
 	response := "ALTER TABLE `" + m.TableName + "`"
 	//DROP FOREIGN KEY IF EXISTS `fk_Users_Id`;
-	response += " DROP FOREIGN KEY IF EXISTS `fk_" + field.table_name + "_" + field.name + "`,\n"
-	response += " CHANGE `" + field.name + "` " + field.columnDefinition() + ";"
+	if field.fk != nil {
+		response += " DROP FOREIGN KEY IF EXISTS `fk_" + field.table_name + "_" + field.name + "`,\n"
+		response += " CHANGE `" + field.name + "` " + field.columnDefinition() + ";"
+	}
 
 	if err := m.db.Ping(); err != nil {
 		panic("\nError While Changing Field" + err.Error())

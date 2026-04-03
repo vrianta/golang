@@ -21,8 +21,8 @@ type (
 		groupBy    string
 
 		// Other options
-		limit   int
-		offset  int
+		limit   int64
+		offset  int64
 		orderBy string
 
 		operation           string // "select", "delete", "update"
@@ -55,6 +55,21 @@ type (
 // to understand what it does and how to use it. The goal is to make database access as intuitive as possible.
 //
 // If you are not a Go developer, don't worry! The comments explain the logic in plain English.
+
+// Returning all results matching the queryBuilder as a map of primary key values to row data (as Result).
+func (m *meta) All() (Results, error) {
+	return m.Get().Fetch()
+}
+
+// Get upto Certain index of results matching the queryBuilder as a map of primary key values to row data (as Result).
+func (m *meta) GetUpto(limit int64) (Results, error) {
+	return m.Get().Limit(limit).Fetch()
+}
+
+// Get Between certain index of results matching the queryBuilder as a map of primary key values to row data (as Result).
+func (m *meta) GetBetween(offset, limit int64) (Results, error) {
+	return m.Get().Offset(offset).Limit(limit).Fetch()
+}
 
 // Entry point: create a new queryBuilder for the given model struct.
 // This function starts a new queryBuilder chain. By default, it prepares for a SELECT operation.
@@ -248,7 +263,7 @@ func (q *queryBuilder) Between(min, max any) *queryBuilder {
 // IsNull adds an IS NULL condition to the WHERE clause.
 // Usage: .Where("deleted_at").IsNull()
 func (q *queryBuilder) IsNull() *queryBuilder {
-	q.whereClauses = append(q.whereClauses, fmt.Sprintf("`%s` IS NULL", q.lastColumn))
+	q.whereClauses = append(q.whereClauses, fmt.Sprintf("`%s` IS NULL ", q.lastColumn))
 	q.lastColumn = ""
 	return q
 }
@@ -256,7 +271,7 @@ func (q *queryBuilder) IsNull() *queryBuilder {
 // IsNotNull adds an IS NOT NULL condition to the WHERE clause.
 // Usage: .Where("deleted_at").IsNotNull()
 func (q *queryBuilder) IsNotNull() *queryBuilder {
-	q.whereClauses = append(q.whereClauses, fmt.Sprintf("`%s` IS NOT NULL", q.lastColumn))
+	q.whereClauses = append(q.whereClauses, fmt.Sprintf("`%s` IS NOT NULL ", q.lastColumn))
 	q.lastColumn = ""
 	return q
 }
@@ -323,7 +338,7 @@ func (q *InsertRowBuilder) To(value any) *InsertRowBuilder {
 
 // Limit restricts the number of results returned by the queryBuilder.
 // Example: .Limit(10)
-func (q *queryBuilder) Limit(n int) *queryBuilder {
+func (q *queryBuilder) Limit(n int64) *queryBuilder {
 	q.limit = n // Store the limit for later
 	return q
 }
@@ -628,14 +643,14 @@ func (q *queryBuilder) GroupBy(clause string) *queryBuilder {
 
 // Offset sets the OFFSET for skipping a number of rows (for pagination).
 // Usage: .Offset(20)
-func (q *queryBuilder) Offset(n int) *queryBuilder {
+func (q *queryBuilder) Offset(n int64) *queryBuilder {
 	q.offset = n
 	return q
 }
 
 // Page sets both LIMIT and OFFSET for paginated queries.
 // Usage: .Page(2, 10) // page 2, 10 results per page
-func (q *queryBuilder) Page(page int, pageSize int) *queryBuilder {
+func (q *queryBuilder) Page(page int64, pageSize int64) *queryBuilder {
 	if page < 1 {
 		page = 1
 	}
