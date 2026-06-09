@@ -1,4 +1,4 @@
-package structperser
+package structparser
 
 import (
 	"errors"
