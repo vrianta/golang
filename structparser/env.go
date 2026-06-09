@@ -11,7 +11,7 @@ import (
 /*
 Perse only Environment tag which is env
 */
-func perseEnv(envKey string, fieldVal *reflect.Value, fieldType *reflect.StructField) error {
+func parseEnv(envKey string, fieldVal *reflect.Value, fieldType *reflect.StructField) error {
 	envValue, exists := os.LookupEnv(envKey)
 	if !exists || envValue == "" {
 		return fmt.Errorf("Environment Value is Empty") // Skip if the env variable isn't set

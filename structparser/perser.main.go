@@ -50,7 +50,13 @@ func perserValue(val reflect.Value, crashOnFail bool) error {
 		}
 
 		if envKey, hasTag := fieldType.Tag.Lookup("env"); hasTag && envKey != "" {
-			if err := perseEnv(envKey, &fieldVal, &fieldType); err == nil {
+			if err := parseEnv(envKey, &fieldVal, &fieldType); err == nil {
+				continue
+			}
+		}
+
+		if argName, hasTag := fieldType.Tag.Lookup("arg"); hasTag && argName != "" {
+			if err := parseArg(argName, &fieldVal, &fieldType); err == nil {
 				continue
 			}
 		}
