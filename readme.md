@@ -1,3 +1,3 @@
 # Golang
 
-`DOC` : [https://vrianta.in/golang/](Document)
+`DOC` : [Document](https://vrianta.in/golang/)
