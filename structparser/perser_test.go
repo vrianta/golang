@@ -13,6 +13,8 @@ type TestConfig struct {
 	Port         string `env:"TEST_PORT"`
 	ApiKey       string `env:"TEST_KEY" required:"true"`
 	AppMode      string `default:"production"`
+	Debug        bool   `arg:"debug" default:"false"`
+	Retries      int    `arg:"retries" default:"3"`
 	RequiredTest string `required:"true"`
 }
 
@@ -31,6 +33,7 @@ func TestParse_CoreLogic(t *testing.T) {
 		name          string
 		input         *TestConfig
 		setupEnv      map[string]string
+		setupArgs     []string
 		expectedCheck func(t *testing.T, cfg *TestConfig) // Strongly typed callback!
 		wantErr       bool
 		expectedErr   string
@@ -87,6 +90,41 @@ func TestParse_CoreLogic(t *testing.T) {
 			},
 		},
 		{
+			name: "Success: CLI arg sets bool field",
+			input: &TestConfig{
+				RequiredTest: "t",
+			},
+			setupEnv: map[string]string{
+				"TEST_KEY": "secure-token-123",
+			},
+			setupArgs: []string{"cmd", "--debug"},
+			wantErr:   false,
+			expectedCheck: func(t *testing.T, cfg *TestConfig) {
+				if !cfg.Debug {
+					t.Errorf("expected Debug to be true when --debug is provided")
+				}
+				if cfg.AppMode != "production" {
+					t.Errorf("expected AppMode default 'production', got %q", cfg.AppMode)
+				}
+			},
+		},
+		{
+			name: "Success: CLI arg overrides default value",
+			input: &TestConfig{
+				RequiredTest: "t",
+			},
+			setupEnv: map[string]string{
+				"TEST_KEY": "secure-token-123",
+			},
+			setupArgs: []string{"cmd", "--retries=5"},
+			wantErr:   false,
+			expectedCheck: func(t *testing.T, cfg *TestConfig) {
+				if cfg.Retries != 5 {
+					t.Errorf("expected Retries to be 5 when --retries=5 is provided, got %d", cfg.Retries)
+				}
+			},
+		},
+		{
 			name:        "Error: Required field data is missing entirely",
 			input:       &TestConfig{}, // ApiKey & RequiredTest left at zero-value
 			setupEnv:    nil,           // Explicitly no environment variables set
@@ -97,19 +135,21 @@ func TestParse_CoreLogic(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			// 1. Set environment variables
-			for k, v := range tt.setupEnv {
-				os.Setenv(k, v)
+			origArgs := os.Args
+			if tt.setupArgs != nil {
+				os.Args = tt.setupArgs
 			}
-
-			// Clean up environment variables
 			defer func() {
+				os.Args = origArgs
 				for k := range tt.setupEnv {
 					os.Unsetenv(k)
 				}
 			}()
 
-			// 2. Execute Parse (Compiler automatically infers T is TestConfig!)
+			// 1. Set environment variables
+			for k, v := range tt.setupEnv {
+				os.Setenv(k, v)
+			}
 			_, err := Parse(tt.input, false)
 
 			// 3. Assert on expected errors
