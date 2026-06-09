@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>StructParser Documentation</title>
+    <meta name="description" content="StructParser is a small Go helper for populating struct fields from environment variables, command-line arguments, and default values.">
+    <meta name="keywords" content="Go, struct parser, environment variables, CLI args, default values, required fields">
+    <meta name="author" content="StructParser">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="StructParser - Struct field parsing for Go">
+    <meta property="og:description" content="Populate Go struct fields from env vars, CLI args, and defaults using simple tags.">
+    <meta property="og:type" content="website">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="../assets/css/Bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/css/styles.css" rel="stylesheet">
+    <link href="../assets/css/theme.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top border-bottom bg-white">
+        <div class="container">
+            <a class="navbar-brand fw-semibold" href="../index.html">StructParser</a>
+            <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div id="nav" class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#overview">Overview</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#tags">Tags</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#examples">Examples</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#notes">Notes</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="py-5 mt-5">
+        <div class="container text-center py-5">
+            <span class="badge bg-primary-subtle text-primary mb-3">Go Struct Parser</span>
+            <h1 class="display-5 fw-bold mt-3">StructParser</h1>
+            <p class="lead text-muted mt-3 mx-auto" style="max-width: 720px;">
+                Populate Go struct fields from environment variables, command-line arguments, and default values with a simple tag-based API.
+            </p>
+            <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+                <a href="#usage" class="btn btn-primary btn-lg px-4">Usage</a>
+                <a href="#tags" class="btn btn-outline-secondary btn-lg px-4">Available Tags</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="container py-5" id="overview">
+        <div class="text-center mb-5">
+            <h2 class="fw-semibold">Why use StructParser?</h2>
+            <p class="text-muted mt-2">Keep configuration loading simple and declarative using Go struct tags.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="h-100 p-4 border rounded-3">
+                    <h5 class="fw-semibold mb-2">Environment Variables</h5>
+                    <p class="text-muted mb-0">Populate structs directly from environment variables with minimal boilerplate.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="h-100 p-4 border rounded-3">
+                    <h5 class="fw-semibold mb-2">Command-line Flags</h5>
+                    <p class="text-muted mb-0">Support CLI arguments as flags and parse values into your configuration structs.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="h-100 p-4 border rounded-3">
+                    <h5 class="fw-semibold mb-2">Defaults & Validation</h5>
+                    <p class="text-muted mb-0">Use default values and required validation to make struct initialization predictable.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container pb-5" id="tags">
+        <div class="text-center mb-5">
+            <h2 class="fw-semibold">Available Tags</h2>
+            <p class="text-muted mt-2">Use tags to declare how each field should be populated.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="p-4 border rounded-3">
+                    <h3 id="env" class="fw-semibold">env</h3>
+                    <p class="text-muted">Reads a value from an environment variable and parses it into the field.</p>
+                    <p class="mb-1"><strong>Syntax:</strong> <code>`env:"ENV_NAME"`</code></p>
+                    <p class="mb-0"><strong>Supported types:</strong> string, bool, ints, uints, float32/64, time.Duration.</p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="p-4 border rounded-3">
+                    <h3 id="arg" class="fw-semibold">arg</h3>
+                    <p class="text-muted">Reads a value from CLI arguments and assigns it to the field.</p>
+                    <p class="mb-1"><strong>Syntax:</strong> <code>`arg:"flag"`</code></p>
+                    <p class="mb-0"><strong>Supported forms:</strong> <code>--flag=value</code>, <code>-flag=value</code>, <code>--flag value</code>, <code>-flag value</code>, and boolean flags like <code>--debug</code>.</p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="p-4 border rounded-3">
+                    <h3 id="default" class="fw-semibold">default</h3>
+                    <p class="text-muted">Provides a fallback value when no env or arg value is present.</p>
+                    <p class="mb-1"><strong>Syntax:</strong> <code>`default:"value"`</code></p>
+                    <p class="mb-0"><strong>Supported types:</strong> same as env and arg tags.</p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="p-4 border rounded-3">
+                    <h3 id="required" class="fw-semibold">required</h3>
+                    <p class="text-muted">Marks a field as mandatory. If it remains zero-valued after parsing, an error is returned.</p>
+                    <p class="mb-1"><strong>Syntax:</strong> <code>`required:"true"`</code> or <code>`required:""`</code></p>
+                    <p class="mb-0">This tag is evaluated last after env, arg, and default processing.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container pb-5" id="usage">
+        <div class="text-center mb-5">
+            <h2 class="fw-semibold">Usage</h2>
+            <p class="text-muted mt-2">Pass a pointer to your struct into <code>Parse</code> and let StructParser populate the fields.</p>
+        </div>
+
+        <div class="p-4 border rounded-3 bg-light">
+            <pre><code class="language-go">package main
+
+import (
+    "fmt"
+    "github.com/vrianta/structparser"
+)
+
+type Config struct {
+    Host    string `env:"APP_HOST" default:"localhost"`
+    Port    int    `env:"APP_PORT" default:"8080"`
+    Debug   bool   `arg:"debug" default:"false"`
+    ApiKey  string `env:"APP_API_KEY" required:"true"`
+}
+
+func main() {
+    cfg := &Config{}
+    _, err := structparser.Parse(cfg, false)
+    if err != nil {
+        panic(err)
+    }
+
+    fmt.Printf("loaded config: %+v\n", cfg)
+}
+</code></pre>
+        </div>
+
+        <div class="row mt-4 g-4">
+            <div class="col-md-6">
+                <div class="p-4 border rounded-3">
+                    <h4 class="fw-semibold">Processing order</h4>
+                    <ul class="text-muted mb-0">
+                        <li><code>env</code></li>
+                        <li><code>arg</code></li>
+                        <li><code>default</code></li>
+                        <li><code>required</code></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-4 border rounded-3">
+                    <h4 class="fw-semibold">Error handling</h4>
+                    <p class="text-muted mb-0">If the struct is not a non-nil pointer, or if a required field remains empty, <code>Parse</code> returns an error.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container pb-5" id="examples">
+        <div class="text-center mb-5">
+            <h2 class="fw-semibold">Examples</h2>
+            <p class="text-muted mt-2">Short examples for each tag type.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="p-4 border rounded-3">
+                    <h5 class="fw-semibold">Env example</h5>
+                    <pre><code class="language-go">type Config struct {
+    ApiKey string `env:"APP_API_KEY" required:"true"`
+    Host   string `env:"APP_HOST" default:"localhost"`
+}</code></pre>
+                    <p class="text-muted mb-0">If <code>APP_HOST</code> is missing, <code>Host</code> falls back to <code>localhost</code>.</p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="p-4 border rounded-3">
+                    <h5 class="fw-semibold">CLI arg example</h5>
+                    <pre><code class="language-go">type Config struct {
+    Verbose bool `arg:"verbose" default:"false"`
+}</code></pre>
+                    <p class="text-muted mb-0">Use <code>--verbose</code> or <code>--verbose=true</code> to enable the field.</p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="p-4 border rounded-3">
+                    <h5 class="fw-semibold">Default example</h5>
+                    <pre><code class="language-go">type Config struct {
+    Mode string `default:"production"`
+}</code></pre>
+                    <p class="text-muted mb-0">When no value is supplied, <code>Mode</code> becomes <code>production</code>.</p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="p-4 border rounded-3">
+                    <h5 class="fw-semibold">Required field</h5>
+                    <pre><code class="language-go">type Config struct {
+    ApiKey string `env:"APP_API_KEY" required:"true"`
+}</code></pre>
+                    <p class="text-muted mb-0">If the value is still zero-valued after parsing, <code>Parse</code> returns an error.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container pb-5" id="notes">
+        <div class="text-center mb-5">
+            <h2 class="fw-semibold">Notes</h2>
+            <p class="text-muted mt-2">Important details for working with StructParser.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="p-4 border rounded-3">
+                    <h5 class="fw-semibold">Exported fields only</h5>
+                    <p class="text-muted mb-0">StructParser can only set exported fields because it uses reflection.</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-4 border rounded-3">
+                    <h5 class="fw-semibold">Duration support</h5>
+                    <p class="text-muted mb-0">Use Go duration syntax like <code>"30s"</code> or <code>"5m"</code> for `time.Duration` values.</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-4 border rounded-3">
+                    <h5 class="fw-semibold">Tag precedence</h5>
+                    <p class="text-muted mb-0"><code>env</code> is evaluated first, then <code>arg</code>, then <code>default</code>, and finally <code>required</code>.</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-4 border rounded-3">
+                    <h5 class="fw-semibold">Installation</h5>
+                    <p class="text-muted mb-0">Import the library from <code>github.com/vrianta/structparser</code> and call <code>structparser.Parse</code>.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-top py-4">
+        <div class="container text-center">
+            <p class="mb-1 fw-medium">StructParser © 2026</p>
+            <small class="text-muted">MIT License · Simple config parsing for Go</small>
+        </div>
+    </footer>
+
+    <script src="../assets/js/Bootstrap/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
