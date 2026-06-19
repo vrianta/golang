@@ -1,4 +1,4 @@
-# structparser
+![Gonfig Banner](./assets/gonfig-banner.png)
 
 `gonfig` is a small Go library for populating struct fields from environment variables, command-line arguments, and default values.
 
