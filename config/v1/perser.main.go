@@ -6,6 +6,14 @@ import (
 	"reflect"
 )
 
+func New[T any](crashOnFail bool) T {
+	var cfg T
+
+	Parse(&cfg, crashOnFail)
+
+	return cfg
+}
+
 /*
 Function wchich will get a any struct and loop thorugh it veriables.
 look for env tag and populate it
