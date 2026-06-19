@@ -1,6 +1,6 @@
 # structparser
 
-`structparser` is a small Go library for populating struct fields from environment variables, command-line arguments, and default values.
+`gonfig` is a small Go library for populating struct fields from environment variables, command-line arguments, and default values.
 
 ## Table of Contents
 
@@ -17,13 +17,29 @@
 
 ## Overview
 
-Use `structparser.Parse[T]` to walk a struct and populate exported fields from tags.
+Use `gonfig.New[T](crach of issue)` to walk a struct and populate exported fields from tags.
 It supports:
 
 - `env` — read values from environment variables
 - `arg` — read values from CLI flags
 - `default` — populate fallback values
 - `required` — validate fields are not zero values
+
+## How to import it
+
+Run the bellow command to import it in your project
+
+```bash
+go get github.com/vrianta/golang/gonfig/v1
+```
+
+To use this you have to import it
+
+```go
+import (
+    gonfig "github.com/vrianta/golang/gonfig/v1"
+)
+```
 
 ## Usage
 
@@ -32,24 +48,18 @@ package main
 
 import (
     "fmt"
-    "github.com/vrianta/structparser"
+    gonfig "github.com/vrianta/golang/gonfig/v1"
 )
 
-type Config struct {
-    Host    string `env:"APP_HOST" default:"localhost"`
-    Port    int    `env:"APP_PORT" default:"8080"`
-    Debug   bool   `arg:"debug" default:"false"`
-    ApiKey  string `env:"APP_API_KEY" required:"true"`
-}
+var Flags = gonfig.New[struct {
+	Host   string `env:"APP_HOST" arg:"host" default:"localhost"`
+	Port   int    `env:"APP_PORT" default:"8080"`
+	Debug  bool   `arg:"debug" default:"false"`
+	ApiKey string `env:"APP_API_KEY" arg:"apikey" required:""`
+}](true) // true means crash if any error came
 
 func main() {
-    cfg := &Config{}
-    _, err := structparser.Parse(cfg, false)
-    if err != nil {
-        panic(err)
-    }
-
-    fmt.Printf("loaded config: %+v\n", cfg)
+	fmt.Println(Flags.Host)
 }
 ```
 
@@ -116,10 +126,10 @@ Nested structs are processed recursively.
 ### Environment variables
 
 ```go
-type Config struct {
+var Config = gonfig.New[struct {
     ApiKey string `env:"APP_API_KEY" required:"true"`
     Host   string `env:"APP_HOST" default:"localhost"`
-}
+}](true)
 ```
 
 If `APP_API_KEY` is set and `APP_HOST` is not, the result is:
@@ -130,9 +140,9 @@ If `APP_API_KEY` is set and `APP_HOST` is not, the result is:
 ### Command-line arguments
 
 ```go
-type Config struct {
+var Config = gonfig.New[struct {
     Verbose bool `arg:"verbose" default:"false"`
-}
+}](true)
 ```
 
 Supported CLI forms:
@@ -144,9 +154,9 @@ Supported CLI forms:
 ### Default values
 
 ```go
-type Config struct {
+var Config = gonfig.New[struct {
     Mode string `default:"production"`
-}
+}](true);
 ```
 
 If no `env` or `arg` value is provided, `Mode` becomes `production`.
@@ -154,9 +164,9 @@ If no `env` or `arg` value is provided, `Mode` becomes `production`.
 ### Required fields
 
 ```go
-type Config struct {
+var Config = gonfig.New[struct {
     ApiKey string `env:"APP_API_KEY" required:"true"`
-}
+}](true)
 ```
 
 If `APP_API_KEY` is missing, `Parse(cfg, false)` returns an error.
