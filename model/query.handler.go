@@ -388,7 +388,27 @@ func (q *queryBuilder) Fetch() (Results, error) {
 	if q.groupBy != "" {
 		group = "GROUP BY " + q.groupBy
 	}
-	queryBuilder := fmt.Sprintf("SELECT * FROM %s %s %s %s %s", q.model.TableName, where, group, order, limit)
+	clauses := []string{}
+	if where != "" {
+		clauses = append(clauses, where)
+	}
+	if group != "" {
+		clauses = append(clauses, group)
+	}
+	if order != "" {
+		clauses = append(clauses, order)
+	}
+	if limit != "" {
+		clauses = append(clauses, limit)
+	}
+	if offset != "" {
+		clauses = append(clauses, offset)
+	}
+
+	queryBuilder := fmt.Sprintf("SELECT * FROM `%s` %s", q.model.TableName, strings.TrimSpace(strings.Join(clauses, " ")))
+	if strings.TrimSpace(strings.Join(clauses, " ")) == "" {
+		queryBuilder = fmt.Sprintf("SELECT * FROM `%s`", q.model.TableName)
+	}
 
 	// queryBuilder := fmt.Sprintf("SELECT * FROM %s %s %s", q.model.TableName, where, limit)
 	rows, err := q.model.db.Query(queryBuilder, q.whereArgs...)
