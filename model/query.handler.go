@@ -717,3 +717,39 @@ func (q *queryBuilder) buildOffset() string {
 	}
 	return ""
 }
+
+// Count executes the built count query and returns the number of matching rows.
+// Usage: UserModel.Get().Where(...).Is(...).Count()
+func (q *queryBuilder) Count() (int64, error) {
+	db, err := DatabaseHandler.GetDatabase()
+	if err != nil {
+		return 0, err
+	}
+
+	where := q.buildWhere()
+	group := ""
+	if q.groupBy != "" {
+		group = "GROUP BY " + q.groupBy
+	}
+
+	clauses := []string{}
+	if where != "" {
+		clauses = append(clauses, where)
+	}
+	if group != "" {
+		clauses = append(clauses, group)
+	}
+
+	query := fmt.Sprintf("SELECT COUNT(*) FROM `%s` %s", q.model.TableName, strings.TrimSpace(strings.Join(clauses, " ")))
+	if strings.TrimSpace(strings.Join(clauses, " ")) == "" {
+		query = fmt.Sprintf("SELECT COUNT(*) FROM `%s`", q.model.TableName)
+	}
+
+	row := db.QueryRow(query, q.whereArgs...)
+	var count int64
+	if err := row.Scan(&count); err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}
