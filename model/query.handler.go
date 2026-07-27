@@ -378,6 +378,7 @@ func (q *queryBuilder) Fetch() (Results, error) {
 
 	where := q.buildWhere()
 	limit := q.buildLimit()
+	offset := q.buildOffset()
 
 	order := ""
 	if q.orderBy != "" {
@@ -688,4 +689,11 @@ func (q *queryBuilder) Clone() *queryBuilder {
 	copy.setClauses = append([]string{}, q.setClauses...)
 	copy.setArgs = append([]any{}, q.setArgs...)
 	return &copy
+}
+
+func (q *queryBuilder) buildOffset() string {
+	if q.offset > 0 {
+		return fmt.Sprintf("OFFSET %d", q.offset)
+	}
+	return ""
 }
