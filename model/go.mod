@@ -1,4 +1,4 @@
-module github.com/vrianta/golang.db.model
+module github.com/vrianta/golang/model
 
 go 1.24.3
 
