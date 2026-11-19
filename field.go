@@ -215,6 +215,11 @@ func (f *Field) IsIndex() *Field {
 	return f
 }
 
+func (f *Field) AutoIncrement() *Field {
+	f.autoIncrement = true
+	return f
+}
+
 func (f *Field) columnDefinition() string {
 	var response string
 
