@@ -67,7 +67,7 @@ The package provides automatic database schema synchronization, making it simple
 To use ModelsHandler, define your model as a struct with pointer fields. For example, to create a `Users` model:
 
 ```go
-package models
+package grms
 
 import "github.com/vrianta/golang/model"
 

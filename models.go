@@ -1,4 +1,4 @@
-package model
+package grm
 
 import (
 	"database/sql"

@@ -1,4 +1,4 @@
-package model
+package grm
 
 const (
 	String fieldType = iota

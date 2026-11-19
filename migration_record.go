@@ -1,4 +1,4 @@
-package model
+package grm
 
 var MigrationName string = Date.string() + "_" + Time.string() + "_" + "migration.sql"
 

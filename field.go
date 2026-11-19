@@ -1,4 +1,4 @@
-package model
+package grm
 
 /*
 CREATE TABLE IF NOT EXISTS employees (

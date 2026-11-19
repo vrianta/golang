@@ -1,4 +1,4 @@
-package model
+package grm
 
 // having some basic functions for result and results
 

@@ -252,7 +252,7 @@ type User struct {
 First, create your model definition:
 
 ```go
-package models
+package grms
 
 import "github.com/vrianta/agai/v1/model"
 
@@ -643,7 +643,7 @@ myapp/
 
 **`models/settings.go`**:
 ```go
-package models
+package grms
 
 import "github.com/vrianta/agai/v1/model"
 
