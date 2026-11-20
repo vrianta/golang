@@ -721,8 +721,7 @@ func (q *queryBuilder) buildOffset() string {
 // Count executes the built count query and returns the number of matching rows.
 // Usage: UserModel.Get().Where(...).Is(...).Count()
 func (q *queryBuilder) Count() (int64, error) {
-	db, err := DatabaseHandler.GetDatabase()
-	if err != nil {
+	if err := q.model.db.Ping(); err != nil {
 		return 0, err
 	}
 
@@ -745,7 +744,7 @@ func (q *queryBuilder) Count() (int64, error) {
 		query = fmt.Sprintf("SELECT COUNT(*) FROM `%s`", q.model.TableName)
 	}
 
-	row := db.QueryRow(query, q.whereArgs...)
+	row := q.model.db.QueryRow(query, q.whereArgs...)
 	var count int64
 	if err := row.Scan(&count); err != nil {
 		return 0, err
